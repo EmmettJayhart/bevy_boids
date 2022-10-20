@@ -1,0 +1,21 @@
+[package]
+name = "bevy_boids"
+version = "0.1.0"
+edition = "2021"
+authors = ["Emmett Jayhart"]
+repository = "https://github.com/EmmettJayhart/bevy_boids"
+description = "A bevy plugin to simulate flocking behavior via boids"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+keywords = ["bevy", "boids", "flocking", "simulation"]
+categories = ["simulation", "game-development", "3d"]
+documentation = "https://docs.rs/bevy_boids"
+
+# ------------------------------------------------------------------------- #
+
+[dependencies]
+bevy = { version = "0.8", default_features = false, features = [] }
+
+# ------------------------------------------------------------------------- #
+
+[features]
