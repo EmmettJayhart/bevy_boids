@@ -16,4 +16,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo check --token ${{ secrets.CRATE_TOKEN }}
+      - run: cargo publish --token ${{ secrets.CRATE_TOKEN }}
