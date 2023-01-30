@@ -1,0 +1,22 @@
+name: Manual Delivery
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:
+    tags:
+      required: true
+      type: boolean
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo check --token ${{ secrets.CRATE_TOKEN }}

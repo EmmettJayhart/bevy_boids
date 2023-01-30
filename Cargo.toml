@@ -2,7 +2,7 @@
 name = "bevy_boids"
 version = "0.1.0"
 edition = "2021"
-authors = ["Emmett Jayhart"]
+authors = ["Emmett Jayhart<emmett@jayhart.io>"]
 repository = "https://github.com/EmmettJayhart/bevy_boids"
 description = "A bevy plugin to simulate flocking behavior via boids"
 license = "MIT OR Apache-2.0"
@@ -14,8 +14,10 @@ documentation = "https://docs.rs/bevy_boids"
 # ------------------------------------------------------------------------- #
 
 [dependencies]
-bevy = { version = "0.8", default_features = false, features = [] }
+bevy = { version = "0.9.1", default_features = false, features = [] }
+bevy_rapier3d = "0.20.0"
 
 # ------------------------------------------------------------------------- #
 
 [features]
+dev = ["bevy/dynamic"]
