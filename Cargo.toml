@@ -1,6 +1,6 @@
 [package]
 name = "bevy_boids"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 authors = ["Emmett Jayhart<emmett@jayhart.io>"]
 repository = "https://github.com/EmmettJayhart/bevy_boids"
@@ -15,10 +15,6 @@ documentation = "https://docs.rs/bevy_boids"
 
 [dependencies]
 bevy = { version = "0.9.1", default_features = false }
-# bevy_rapier3d = { version = "0.20.0", default_features = false, features = [
-#     "dim3",
-#     "async-collider",
-# ] }
 
 # ------------------------------------------------------------------------- #
 
