@@ -35,7 +35,7 @@ impl Default for BoidDescriptor {
             lift: 1.0,
             gravity: 1.0,
             bank: 1.0,
-            separation: 70.0,
+            separation: 100.0,
             alignment: 1.0,
             cohesion: 10.0,
             bank_rate: 0.01,
@@ -79,8 +79,9 @@ fn apply_intent(
             heading += separation + alignment + cohesion;
         }
 
-        let lateral =
-            descriptor.bank_rate * (heading.dot(transform.left()) + transform.up().dot(Vec3::Y));
+        let lateral = descriptor.bank_rate
+            * ((heading.dot(transform.left()) + transform.up().dot(Vec3::Y))
+                - transform.left().dot(Vec3::Y));
         let vertical =
             descriptor.rise_rate * (heading.dot(transform.up()) + transform.up().dot(Vec3::Y));
 
