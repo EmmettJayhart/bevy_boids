@@ -6,10 +6,9 @@ use bevy_spatial::{RTreeAccess3D, RTreePlugin3D, SpatialAccess};
 pub struct BoidsPlugin;
 impl Plugin for BoidsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_plugin(RTreePlugin3D::<BoidTracker>::default());
+        app.add_plugin(RTreePlugin3D::<Boid>::default());
 
-        app.add_system(track_boids)
-            .add_system(apply_intent.before(apply_physics))
+        app.add_system(apply_intent.before(apply_physics))
             .add_system(apply_physics);
 
         #[cfg(feature = "reflect")]
@@ -53,24 +52,10 @@ impl Default for BoidDescriptor {
 #[cfg_attr(feature = "reflect", derive(Reflect))]
 pub struct Boid;
 
-#[derive(Component)]
-struct BoidTracker;
-
-fn track_boids(
-    mut commands: Commands,
-    mut query: Query<Entity, (With<Boid>, Without<BoidTracker>)>,
-) {
-    for entity in query.iter_mut() {
-        if let Some(mut entity) = commands.get_entity(entity) {
-            entity.insert(BoidTracker);
-        }
-    }
-}
-
 fn apply_intent(
     mut boids_query: Query<(Entity, &mut Transform, &GlobalTransform), With<Boid>>,
     mut headings: Local<HashMap<Entity, (f32, f32)>>,
-    tree_access: Res<RTreeAccess3D<BoidTracker>>,
+    tree_access: Res<RTreeAccess3D<Boid>>,
     descriptor: Res<BoidDescriptor>,
     time: Res<Time>,
 ) {
