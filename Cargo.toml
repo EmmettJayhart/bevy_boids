@@ -1,6 +1,6 @@
 [package]
 name = "bevy_boids"
-version = "0.5.0"
+version = "0.6.0"
 edition = "2021"
 authors = ["Emmett Jayhart<emmett@jayhart.io>"]
 repository = "https://github.com/EmmettJayhart/bevy_boids"
@@ -15,8 +15,12 @@ documentation = "https://docs.rs/bevy_boids"
 
 [dependencies]
 bevy = { version = "0.10.0", default_features = false }
+bevy_spatial = { git = "https://github.com/Elabajaba/bevy-spatial", branch = "bevy-update", features = [
+    "rstar",
+] }
 
 # ------------------------------------------------------------------------- #
 
 [features]
+default = ["reflect"]
 reflect = []

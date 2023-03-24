@@ -1,11 +1,15 @@
 #[cfg(feature = "reflect")]
 use bevy::{ecs::reflect::ReflectResource, reflect::Reflect};
 use bevy::{prelude::*, utils::HashMap};
+use bevy_spatial::{RTreeAccess3D, RTreePlugin3D, SpatialAccess};
 
 pub struct BoidsPlugin;
 impl Plugin for BoidsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system(apply_intent.before(apply_physics))
+        app.add_plugin(RTreePlugin3D::<BoidTracker>::default());
+
+        app.add_system(track_boids)
+            .add_system(apply_intent.before(apply_physics))
             .add_system(apply_physics);
 
         #[cfg(feature = "reflect")]
@@ -49,28 +53,36 @@ impl Default for BoidDescriptor {
 #[cfg_attr(feature = "reflect", derive(Reflect))]
 pub struct Boid;
 
+#[derive(Component)]
+struct BoidTracker;
+
+fn track_boids(
+    mut commands: Commands,
+    mut query: Query<Entity, (With<Boid>, Without<BoidTracker>)>,
+) {
+    for entity in query.iter_mut() {
+        if let Some(mut entity) = commands.get_entity(entity) {
+            entity.insert(BoidTracker);
+        }
+    }
+}
+
 fn apply_intent(
     mut boids_query: Query<(Entity, &mut Transform, &GlobalTransform), With<Boid>>,
     mut headings: Local<HashMap<Entity, (f32, f32)>>,
+    tree_access: Res<RTreeAccess3D<BoidTracker>>,
     descriptor: Res<BoidDescriptor>,
     time: Res<Time>,
 ) {
     for (boid, transform, global_transform) in boids_query.iter() {
         let mut heading = Vec3::ZERO;
+        let position = global_transform.translation();
+        let other_boids = tree_access.within_distance(position, descriptor.maximum_vision);
 
-        for (other_boid, _, other_global_transform) in boids_query.iter() {
-            if other_boid == boid {
-                continue;
-            }
+        for &(other_position, other_boid) in other_boids.iter() {
+            let (_, _, other_global_transform) = boids_query.get(other_boid).unwrap();
 
-            let position = global_transform.translation();
-            let other_position = other_global_transform.translation();
             let distance = position.distance(other_position);
-
-            if distance > descriptor.maximum_vision {
-                continue;
-            }
-
             let separation =
                 (position - other_position).normalize_or_zero() * descriptor.separation / distance;
             let alignment = other_global_transform.forward() * descriptor.alignment;
