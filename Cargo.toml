@@ -14,7 +14,7 @@ documentation = "https://docs.rs/bevy_boids"
 # ------------------------------------------------------------------------- #
 
 [dependencies]
-bevy = { version = "0.9.1", default_features = false }
+bevy = { version = "0.12", default_features = false }
 
 # ------------------------------------------------------------------------- #
 

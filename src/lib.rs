@@ -5,8 +5,9 @@ use bevy::{prelude::*, utils::HashMap};
 pub struct BoidsPlugin;
 impl Plugin for BoidsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_system(apply_intent.before(apply_physics))
-            .add_system(apply_physics);
+        app.insert_resource(BoidDescriptor::default());
+        app.add_systems(Update, apply_intent.before(apply_physics))
+            .add_systems(Update, apply_physics);
 
         #[cfg(feature = "reflect")]
         app.register_type::<BoidDescriptor>();
